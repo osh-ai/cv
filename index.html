@@ -430,6 +430,32 @@ body {
   .doc-header::after { left: 28px; right: 28px; }
   .skills-grid { grid-template-columns: 1fr; gap: 16px; }
   .tl-insight { display: none; }
+
+  /* Stack tagline items vertically on mobile */
+  .name-block .title-line {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+    white-space: normal;
+  }
+  .title-sep { display: none; }
+  .title-item { display: block; }
+
+  /* Stack footer: sig on top, contact items below, each on its own line */
+  .doc-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .footer-contact {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .contact-sep { display: none; }
+  .contact-item { display: block; }
 }
 
 @media print {
@@ -890,8 +916,7 @@ body {
   <div class="doc-footer">
     <div class="footer-sig">Looking forward to working together</div>
     <div class="footer-contact">
-      <a href="#" class="email-trigger" title="Send a message">✉</a> <a href="#" class="email-trigger" style="color:var(--muted); text-decoration:none;">olena.hmcs@gmail.com</a> ·
-      <a href="sms:+13476887636" class="phone-trigger" title="Send a text">✆</a> <a href="sms:+13476887636" class="phone-trigger" style="color:var(--muted); text-decoration:none;">347 688 7636</a> · Manhattan, New York
+      <span class="contact-item"><a href="#" class="email-trigger" title="Send a message">✉</a> <a href="#" class="email-trigger" style="color:var(--muted); text-decoration:none;">olena.hmcs@gmail.com</a></span><span class="contact-sep"> · </span><span class="contact-item"><a href="sms:+13476887636" class="phone-trigger" title="Send a text">✆</a> <a href="sms:+13476887636" class="phone-trigger" style="color:var(--muted); text-decoration:none;">347 688 7636</a></span><span class="contact-sep"> · </span><span class="contact-item"><a href="https://www.linkedin.com/in/olena-shestakova-a0161049/" target="_blank" rel="noopener" style="color:var(--muted); text-decoration:none;" title="LinkedIn">in/ olena-shestakova</a></span><span class="contact-sep"> · </span><span class="contact-item">Manhattan, New York</span>
     </div>
   </div>
 
