@@ -69,7 +69,9 @@ body {
     0 32px 64px rgba(60,40,10,0.08),
     inset 0 0 0 0.5px rgba(0,0,0,0.06);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Screen-only readability boost — scales the entire CV up by 15%.
@@ -147,7 +149,7 @@ body {
 }
 
 /* ── BODY ── */
-.doc-body { padding: 20px 48px 28px; }
+.doc-body { padding: 20px 48px 28px; flex: 1; }
 
 /* ── SECTION HEADING ── */
 .sec-head {
