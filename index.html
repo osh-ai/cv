@@ -916,7 +916,7 @@ body {
   <div class="doc-footer">
     <div class="footer-sig">Looking forward to working together</div>
     <div class="footer-contact">
-      <span class="contact-item"><a href="#" class="email-trigger" title="Send a message">✉</a> <a href="#" class="email-trigger" style="color:var(--muted); text-decoration:none;">olena.hmcs@gmail.com</a></span><span class="contact-sep"> · </span><span class="contact-item"><a href="sms:+13476887636" class="phone-trigger" title="Send a text">✆</a> <a href="sms:+13476887636" class="phone-trigger" style="color:var(--muted); text-decoration:none;">347 688 7636</a></span><span class="contact-sep"> · </span><span class="contact-item"><a href="https://www.linkedin.com/in/olena-shestakova-a0161049/" target="_blank" rel="noopener" style="color:var(--muted); text-decoration:none;" title="LinkedIn">in/ olena-shestakova</a></span><span class="contact-sep"> · </span><span class="contact-item">Manhattan, New York</span>
+      <span class="contact-item"><a href="#" class="email-trigger" title="Send a message">✉</a> <a href="#" class="email-trigger" style="color:var(--muted); text-decoration:none;">olena.hmcs@gmail.com</a></span><span class="contact-sep"> · </span><span class="contact-item"><a href="https://www.linkedin.com/in/olena-shestakova-a0161049/" target="_blank" rel="noopener" style="color:var(--muted); text-decoration:none;" title="LinkedIn">in/ olena-shestakova</a></span><span class="contact-sep"> · </span><span class="contact-item">Manhattan, New York</span>
     </div>
   </div>
 
@@ -940,7 +940,7 @@ body {
 
 
 <script>
-// ── EMAIL & PHONE CONTACT ──
+// ── EMAIL CONTACT ──
 const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 
 document.querySelectorAll('.email-trigger').forEach(el => {
@@ -952,10 +952,6 @@ document.querySelectorAll('.email-trigger').forEach(el => {
       document.getElementById('form-overlay').style.display = 'flex';
     }
   });
-});
-
-document.querySelector('.phone-trigger').addEventListener('click', (e) => {
-  if (!isMobile) e.preventDefault();
 });
 
 document.getElementById('form-overlay').addEventListener('click', (e) => {
