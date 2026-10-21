@@ -629,7 +629,7 @@ body { background: #ffffff; background-image: none; }
 .avatar { width: 156px; height: 156px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid #ffffff; box-shadow: 0 0 0 1.5px var(--gold); margin-left: 0; margin-right: 18px; }
 .header-top { align-items: center; justify-content: flex-start; }
 @media print { body.print-compact .avatar { width: 114px; height: 114px; } }
-.summary-sub { display: block; margin-top: 4px; font-size: 10.4px; color: var(--muted); white-space: nowrap; }
+.summary-sub { display: block; margin-top: 4px; font-size: 10.4px; color: var(--muted); }
 .principles { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
 .pr { padding: 4px 0; border-bottom: 1px solid #f0f0f0; line-height: 1.4; }
 .pr-t { display: block; font-size: 11px; font-weight: 600; color: var(--ink); }
@@ -752,7 +752,17 @@ body { background: #ffffff; background-image: none; }
 }
 @media print {
   body.print-compact .summary-main, .summary-main { padding-left: 0 !important; padding-right: 0 !important; background: transparent !important; }
-  .summary-sub { font-size: 10.6px !important; }
+  .summary-sub { font-size: 10.6px !important; white-space: nowrap; }
+}
+@media screen and (max-width: 840px) {
+  .avatar { width: 84px; height: 84px; margin-right: 14px; }
+  .name-block h1 { font-size: 27px; }
+  .header-top { align-items: center; }
+  .print-btn { position: static; align-self: flex-end; margin: 0 16px 8px 0; padding: 7px 11px; }
+  .print-btn .kbd { display: none; }
+  .chrome { margin-bottom: 8px; }
+  .pr-quote { padding-left: 14px !important; }
+  .summary-main { padding-left: 14px !important; }
 }
 </style>
 </head>
