@@ -1147,6 +1147,7 @@ document.querySelectorAll('.tl-header').forEach(header => {
   header.addEventListener('click', () => {
     const entry = header.closest('.tl-entry');
     entry.classList.toggle('open');
+    applyPrintCompactClass();
   });
 });
 
@@ -1156,6 +1157,9 @@ function applyPrintCompactClass() {
   const anyOpen = document.querySelector('.tl-entry.open') !== null;
   document.body.classList.toggle('print-compact', !anyOpen);
 }
+
+// Keep the print layout in sync at all times (mobile browsers may print without firing beforeprint)
+applyPrintCompactClass();
 
 function printCV() {
   applyPrintCompactClass();
