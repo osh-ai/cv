@@ -235,7 +235,7 @@ body {
   line-height: 1.55;
   color: var(--ink);
   font-style: italic;
-  padding: 6px 14px 6px 32px;
+  padding: 6px 10px 6px 14px;
   border-left: none;
   background: rgba(193,95,60,0.04);
   margin-bottom: 8px;
@@ -493,7 +493,7 @@ body {
   body.print-compact .doc-body { padding: 10px 48px 14px !important; }
   body.print-compact .doc-footer { padding: 8px 48px 10px !important; }
   body.print-compact .sec-head { margin-top: 8px !important; margin-bottom: 5px !important; }
-  body.print-compact .summary-main { padding: 4px 12px 4px 32px !important; line-height: 1.45 !important; margin-bottom: 5px !important; }
+  body.print-compact .summary-main { padding: 4px 10px 4px 14px !important; line-height: 1.45 !important; margin-bottom: 5px !important; }
   body.print-compact .summary-list li { padding-top: 2px !important; padding-bottom: 2px !important; line-height: 1.4 !important; }
   body.print-compact .summary-block { margin-bottom: 2px !important; }
   body.print-compact .layer { padding: 5px 12px !important; }
@@ -629,7 +629,7 @@ body { background: #ffffff; background-image: none; }
 .avatar { width: 156px; height: 156px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid #ffffff; box-shadow: 0 0 0 1.5px var(--gold); margin-left: 0; margin-right: 18px; }
 .header-top { align-items: center; justify-content: flex-start; }
 @media print { body.print-compact .avatar { width: 114px; height: 114px; } }
-.summary-sub { display: block; margin-top: 4px; font-size: 11px; color: var(--muted); }
+.summary-sub { display: block; margin-top: 4px; font-size: 10.4px; color: var(--muted); white-space: nowrap; }
 .principles { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
 .pr { padding: 4px 0; border-bottom: 1px solid #f0f0f0; line-height: 1.4; }
 .pr-t { display: block; font-size: 11px; font-weight: 600; color: var(--ink); }
@@ -749,6 +749,10 @@ body { background: #ffffff; background-image: none; }
   .tl-bullets li { break-inside: avoid; page-break-inside: avoid; }
   .page { display: block !important; }
   .doc-body { display: block !important; }
+}
+@media print {
+  body.print-compact .summary-main, .summary-main { padding-left: 0 !important; padding-right: 0 !important; background: transparent !important; }
+  .summary-sub { font-size: 10.6px !important; }
 }
 </style>
 </head>
