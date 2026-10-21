@@ -740,6 +740,16 @@ body { background: #ffffff; background-image: none; }
 .doc-header { border-bottom: none !important; }
 .doc-footer { border-top: none !important; }
 @media print { .page { border: none !important; box-shadow: none !important; } }
+/* Print: fill each page; split roles only between bullets, never mid-line */
+@media print {
+  .tl-entry.open { break-inside: auto !important; page-break-inside: auto !important; }
+  .tl-entry.open .tl-body { overflow: visible !important; max-height: none !important; }
+  .tl-entry .tl-header, .tl-entry .tl-subhead { break-after: avoid; page-break-after: avoid; }
+  .tl-entry .tl-subhead { break-inside: avoid; }
+  .tl-bullets li { break-inside: avoid; page-break-inside: avoid; }
+  .page { display: block !important; }
+  .doc-body { display: block !important; }
+}
 </style>
 </head>
 <body>
