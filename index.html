@@ -1157,6 +1157,12 @@ async function handleSubmit(e) {
 // ── DOWNLOAD PDF (embedded in this page, no extra file needed) ──
 document.getElementById('dl-btn').addEventListener('click', (e) => {
   e.preventDefault();
+  // Any role expanded → export exactly what is on screen via the browser's Save-as-PDF
+  if (document.querySelector('.tl-entry.open')) {
+    showDlHint();
+    setTimeout(printCV, 350);
+    return;
+  }
   const b64 = document.getElementById('cv-pdf-data').textContent.trim();
   try {
     const bin = atob(b64), bytes = new Uint8Array(bin.length);
@@ -1170,6 +1176,19 @@ document.getElementById('dl-btn').addEventListener('click', (e) => {
     window.open('data:application/pdf;base64,' + b64, '_blank');
   }
 });
+
+function showDlHint() {
+  let t = document.getElementById('dl-hint');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'dl-hint';
+    t.setAttribute('style','position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1f1f1f;color:#fff;font:500 13px Inter,sans-serif;padding:10px 16px;border-radius:8px;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.2);max-width:90vw;text-align:center');
+    t.textContent = 'Saving your current view: choose “Save as PDF” as the destination.';
+    document.body.appendChild(t);
+  }
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 4500);
+}
 
 // Timeline accordion
 document.querySelectorAll('.tl-header').forEach(header => {
@@ -1205,9 +1224,7 @@ document.addEventListener('keydown', (e) => {
 
 // Also catch print triggered from the browser's File menu
 window.addEventListener('beforeprint', applyPrintCompactClass);
-window.addEventListener('afterprint', () => {
-  document.body.classList.remove('print-compact');
-});
+window.addEventListener('afterprint', applyPrintCompactClass);
 </script>
 </body>
 </html>
