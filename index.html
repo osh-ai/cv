@@ -1157,12 +1157,8 @@ async function handleSubmit(e) {
 // ── DOWNLOAD PDF (embedded in this page, no extra file needed) ──
 document.getElementById('dl-btn').addEventListener('click', (e) => {
   e.preventDefault();
-  // Any role expanded → export exactly what is on screen via the browser's Save-as-PDF
-  if (document.querySelector('.tl-entry.open')) {
-    showDlHint();
-    setTimeout(printCV, 350);
-    return;
-  }
+  // Any role expanded → build a PDF of exactly what is on screen and download it directly
+  if (document.querySelector('.tl-entry.open')) { downloadCurrentView(e.currentTarget); return; }
   const b64 = document.getElementById('cv-pdf-data').textContent.trim();
   try {
     const bin = atob(b64), bytes = new Uint8Array(bin.length);
@@ -1177,17 +1173,79 @@ document.getElementById('dl-btn').addEventListener('click', (e) => {
   }
 });
 
-function showDlHint() {
-  let t = document.getElementById('dl-hint');
-  if (!t) {
-    t = document.createElement('div');
-    t.id = 'dl-hint';
-    t.setAttribute('style','position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1f1f1f;color:#fff;font:500 13px Inter,sans-serif;padding:10px 16px;border-radius:8px;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.2);max-width:90vw;text-align:center');
-    t.textContent = 'Saving your current view: choose “Save as PDF” as the destination.';
-    document.body.appendChild(t);
+function loadScript(src, test) {
+  return new Promise((res, rej) => {
+    if (test()) return res();
+    const el = document.createElement('script');
+    el.src = src; el.onload = res; el.onerror = rej;
+    document.head.appendChild(el);
+  });
+}
+
+// Build a PDF of exactly what is on screen (open roles included) and download it directly.
+async function downloadCurrentView(btn) {
+  const label = btn.querySelector('span');
+  const orig = label.textContent;
+  label.textContent = 'Preparing…';
+  try {
+    await loadScript('https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js', () => window.htmlToImage);
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', () => window.jspdf);
+    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+    await new Promise(r => setTimeout(r, 450)); // let accordion animation settle
+
+    const el = document.querySelector('.page');
+    const rect = el.getBoundingClientRect();
+    const canvas = await htmlToImage.toCanvas(el, {
+      pixelRatio: 2, backgroundColor: '#ffffff',
+      width: el.offsetWidth, height: el.offsetHeight,
+      style: { zoom: '1', margin: '0', border: 'none', boxShadow: 'none' },
+      filter: n => !(n.classList && n.classList.contains('actions'))
+    });
+    const zoom = rect.width / el.offsetWidth;            // screen zoom on the page
+    const k = canvas.width / el.offsetWidth;             // canvas px per (unzoomed) CSS px
+    const mmW = 194, mmH = 281;                          // A4 minus 8mm margins
+    const pageH = Math.floor(canvas.width * mmH / mmW);  // canvas px per PDF page
+
+    // Safe places to break: just before / after bullets, headers, skill rows
+    const cuts = new Set([0, canvas.height]);
+    el.querySelectorAll('li, .tl-header, .tl-entry, .layer, .tl-sub, h2, .section-title, .sec-label, .sec-head, .pr-quote, .flow-text, .tools-row').forEach(n => {
+      if (n.closest('.actions')) return;
+      const r = n.getBoundingClientRect();
+      if (!r.height) return;
+      cuts.add(Math.round(((r.top - rect.top) / zoom - el.clientTop - 3) * k));
+      if (!n.matches('h2, .section-title, .sec-label, .sec-head, .tl-header')) cuts.add(Math.round(((r.bottom - rect.top) / zoom - el.clientTop + 2) * k));
+    });
+    // keep section headings together with the content that follows them
+    el.querySelectorAll('.sec-head').forEach(h => {
+      const r = h.getBoundingClientRect();
+      const t = Math.round(((r.top - rect.top) / zoom - el.clientTop - 3) * k), bt = Math.round(((r.bottom - rect.top) / zoom - el.clientTop) * k) + 70 * k;
+      [...cuts].forEach(c => { if (c > t && c <= bt) cuts.delete(c); });
+    });
+    const sorted = [...cuts].sort((x, y) => x - y);
+
+    const pdf = new jspdf.jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+    let start = 0, first = true;
+    while (start < canvas.height - 2) {
+      let end = Math.min(start + pageH, canvas.height);
+      if (end < canvas.height) {
+        const ok = sorted.filter(c => c > start + pageH * 0.2 && c <= start + pageH);
+        if (ok.length) end = ok[ok.length - 1];
+      }
+      const slice = document.createElement('canvas');
+      slice.width = canvas.width; slice.height = end - start;
+      const ctx = slice.getContext('2d');
+      ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, slice.width, slice.height);
+      ctx.drawImage(canvas, 0, start, canvas.width, end - start, 0, 0, canvas.width, end - start);
+      if (!first) pdf.addPage();
+      pdf.addImage(slice.toDataURL('image/jpeg', 0.95), 'JPEG', 8, 8, mmW, (end - start) * mmW / canvas.width);
+      first = false; start = end;
+    }
+    pdf.save('Olena-Shestakova-CV.pdf');
+  } catch (err) {
+    console.error(err);
+    alert('Could not build the PDF here. Use Print and choose Save as PDF.');
   }
-  t.style.display = 'block';
-  setTimeout(() => { t.style.display = 'none'; }, 4500);
+  label.textContent = orig;
 }
 
 // Timeline accordion
